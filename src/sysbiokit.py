@@ -10,13 +10,19 @@ import numpy as np
 
 
 
+def heaviside(x, theta):
+    """
+    Zero out values of x<theta.
+    """
+    # return 0.5 * (np.sign(x-theta) + 1.0)
+    return np.piecewise(x, [x<theta, x>=theta], [0.0, 1.0])
+
+
 def time_plot(duration):
     x = np.arange(0, duration, 0.1)
-    y = np.sin(x) * np.exp(-x/20.0) * 5.0
+    y = heaviside(x, duration/5.0) * np.sin(x) * np.exp(-x/20.0) * 5.0
     plt.plot(x, y)
     plt.show()
-
-    return
 
 
 class SimpleProduct():
@@ -28,6 +34,9 @@ class SimpleProduct():
         self.product_type = product_type
 
     def report(self):
+        """
+        Print information about the current state of SimpleProduct.
+        """
         print '%s %s' % (self.product_type, self.name)
         if self.self_rate > -0.00001 and self.self_rate < 0.00001:
             print '  dX(t)/dt = %.2f' % (self.const_rate)
@@ -41,6 +50,9 @@ class SimpleProduct():
             
         
     def plot(self):
+        """
+        Plot the concentration of SimpleProduct over time.
+        """
         if self.self_rate > -0.00001 and self.self_rate < 0.00001:
             t = np.arange(0, 10, 0.1)
             y = self.const_rate * t
