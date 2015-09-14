@@ -77,15 +77,18 @@ class LogicProduct():
     by the concentrations of other LogicProducts.
     """
 
-    def __init__(self, name, const_rate=0.0, self_rate=0.0, product_type='protein'):
+    def __init__(self, name, const_rate=0.0, self_rate=0.0,
+                 initial_val=0.0, product_type='protein'):
         self.name = name
         self.const_rate = const_rate
         self.self_rate = self_rate
+        self.initial_val = initial_val
         self.product_type = product_type
         self.parents = []
         self.children = []
         self.switches = []
         self.solved = False
+        self.breaks = []
 
     def add_child(self, child, threshold, activate=True):
         self.children.append(child)
@@ -108,7 +111,9 @@ class LogicProduct():
         for s in self.switches:
             if not s.solved:
                 s.solve()
-        
+
+        for s in self.switches:
+            self.breaks = s.breaks
         
     def report(self):
         """
@@ -148,19 +153,39 @@ class Switch():
     concentration of some parent LogicProduct.
     """
     
-    def __init__(self, parent, child, threshold, activate=True, time=0.0):
+    def __init__(self, parent=None, child=None, threshold=0.0,
+                 activate=True, times=[0.0]):
         self.parent = parent
         self.child = child
         self.threshold = threshold
         self.activate = activate
+        self.time = []
+        self.solved = False
 
-        if parent is not None:
-            self.time = time
-        else:
-            self.time = None
+        if parent is None:
+            self.times = times
+            self.solved = True
 
     def solve(self):
         pass
+
+    def get_breaks(self):
+        breaks = []
+        flip = self.activate
+        for t in self.times:
+            breaks.append((t, flip))
+            flip = not flip
+        return breaks
+
+    def __str__(self):
+        
+        str1 = 'Switch\n'
+        str1 += 'activate: ' + str(self.activate) + '\n'
+        str1 += '  solved: ' + str(self.solved) + '\n'
+        str1 += '  breaks:\n'
+        str1 += '  ' +  str(self.get_breaks()) + '\n'
+        return str1
+        
 
 
 
@@ -175,5 +200,12 @@ if __name__=='__main__':
 
     # LogicProduct test
     lp1 = LogicProduct('Y', 2.0, -0.5)
-    lp1.report()
-    lp1.plot()
+    # lp1.report()
+    # lp1.plot()
+
+    # Switch test
+    s1 = Switch(child=lp1, times=[0.5, 0.7, 1.3])
+    print s1
+
+    s2 = Switch(child=lp1, times=[0.2, 0.4, 0.8], activate=False)
+    print s2
