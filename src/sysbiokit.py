@@ -113,13 +113,16 @@ class LogicProduct():
                 s.solve()
 
         for s in self.switches:
-            self.breaks = s.breaks
+            self.breaks = s.get_breaks()
+        if len(self.breaks) == 0:
+            self.breaks = [(0.0, True)]
         
     def report(self):
         """
         Print information about the current state of SimpleProduct.
         """
         print '%s %s' % (self.product_type, self.name)
+        print '  initial value: %.2f' % (self.initial_val)
         if self.self_rate > -0.00001 and self.self_rate < 0.00001:
             print '  dX(t)/dt = %.2f' % (self.const_rate)
         else:
@@ -130,21 +133,52 @@ class LogicProduct():
             print '  steady state = %.2f' % (-self.const_rate/self.self_rate)
             print '  reaction time = %.2f' % (-np.log(2.0)/self.self_rate)
             
-    def plot(self):
+    def plot(self, start, end, step):
         """
-        Plot the concentration of SimpleProduct over time.
+        Plot the concentration of LogicProduct over time.
         """
+        if not self.solved:
+            self.solve()
         if self.self_rate > -0.00001 and self.self_rate < 0.00001:
-            t = np.arange(0, 10, 0.1)
+            t = np.arange(start, end, step)
             y = self.const_rate * t
         else:
             steady_rate = -self.const_rate/self.self_rate
             rx_t = -np.log(2.0)/self.self_rate
-            duration = rx_t*8.0
-            t = np.arange(0, duration, duration/50.0)
-            y = steady_rate * (1.0 - np.exp(self.self_rate*t))
+            t = np.arange(start, end, step)
+            on_func = lambda y, z: lambda x: steady_rate + (y - steady_rate) * np.exp(self.self_rate*(x-z))
+            off_func = lambda y, z: lambda x: y * np.exp(self.self_rate*(x-z))
+
+            # Build ranges
+            ranges = [t<self.breaks[0][0]]
+            for i in range(1, len(self.breaks)):
+                ranges.append((t>=self.breaks[i-1][0]) * (t<self.breaks[i][0]))
+            ranges.append(t>=self.breaks[-1][0])
+
+            # Build lambdas
+            active = self.breaks[0][1]
+            vals = [self.initial_val]
+            last_val = self.initial_val
+            for i in range(len(self.breaks)-1):
+                print 'i:', i
+                print 'break:', self.breaks[i][0]
+                if active:
+                    vals.append(on_func(last_val, self.breaks[i][0]))
+                    last_val = on_func(last_val, self.breaks[i][0])(self.breaks[i+1][0])
+                else:
+                    vals.append(off_func(last_val, self.breaks[i][0]))
+                    last_val = off_func(last_val, self.breaks[i][0])(self.breaks[i+1][0])
+                active = not active
+                print 'last_val:', last_val
+            if active:
+                vals.append(on_func(last_val, self.breaks[-1][0]))
+            else:
+                vals.append(off_func(last_val, self.breaks[-1][0]))
+            y = np.piecewise(t, ranges, vals)
+            
         plt.plot(t, y)
         plt.show()
+
 
 
 class Switch():
@@ -209,3 +243,10 @@ if __name__=='__main__':
 
     s2 = Switch(child=lp1, times=[0.2, 0.4, 0.8], activate=False)
     print s2
+
+    s3 = Switch(child=lp1, times=[2.0, 10.0, 20.0])
+    print s3
+    lp1.add_switch(s3)
+    lp1.report()
+    lp1.plot(-1.0, 40.0, 0.2)
+    
