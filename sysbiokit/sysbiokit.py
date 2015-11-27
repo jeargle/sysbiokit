@@ -75,10 +75,18 @@ class LogicProduct():
     """
     Product that is regulated by on/off switches possibly controlled
     by the concentrations of other LogicProducts.
+    Acts as a node in a transcription network.
     """
 
     def __init__(self, name, const_rate=0.0, self_rate=0.0,
                  initial_val=0.0, product_type='protein'):
+        """
+        name: name for this specific node in the network
+        const_rate: 
+        self_rate: 
+        initial_val: starting concntration (default 0.0)
+        product_type: RNA, protein (just a label)
+        """
         self.name = name
         self.const_rate = const_rate
         self.self_rate = self_rate
@@ -185,10 +193,16 @@ class Switch():
     """
     Switch that turns a LogicProduct on or off depending on the
     concentration of some parent LogicProduct.
+    Acts as an edge in a transcription network.
     """
     
     def __init__(self, parent=None, child=None, threshold=0.0,
                  activate=True, times=[0.0]):
+        """
+        threshold: input value where Switch switches on/off
+        activate: whether the Switch is an activator or repressor
+        times: set sequence of times when Switch switches (if no parent defined)
+        """
         self.parent = parent
         self.child = child
         self.threshold = threshold

@@ -1,29 +1,28 @@
 # John Eargle
 # 2015
 
-import sys
-import json
-
-# import matplotlib.pyplot as plt
-# import numpy as np
-# import sympy
-
 from sysbiokit.sysbiokit import SimpleProduct, LogicProduct, Switch
 
 
 if __name__=='__main__':
 
+    print '***********************'
+    print '*** SYSBIOKIT TESTS ***'
+    print '***********************'
+    
     # time_plot(30)
 
     # SimpleProduct test
-    # sp1 = SimpleProduct('Y', 2.0, -0.5)
-    # sp1.report()
-    # sp1.plot()
+    print '\n*** SimpleProduct ***'
+    sp1 = SimpleProduct('Y', 2.0, -0.5)
+    sp1.report()
+    sp1.plot()
 
     # LogicProduct test
+    print '\n*** LogicProduct ***'
     lp1 = LogicProduct('Y', 2.0, -0.5)
-    # lp1.report()
-    # lp1.plot()
+    lp1.report()
+    lp1.plot(-1.0, 20.0, 0.2)
 
     # Switch test
     s1 = Switch(child=lp1, times=[0.5, 0.7, 1.3])
