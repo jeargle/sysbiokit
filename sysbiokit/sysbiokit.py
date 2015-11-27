@@ -56,7 +56,7 @@ class SimpleProduct():
             
     def plot(self):
         """
-        Plot the concentration of SimpleProduct over time.
+        Calculate and plot the concentration of SimpleProduct over time.
         """
         if self.self_rate > -0.00001 and self.self_rate < 0.00001:
             t = np.arange(0, 10, 0.1)
@@ -112,6 +112,7 @@ class LogicProduct():
         parameters for plotting the trajectory of this product's
         concentration.
         """
+        # TODO - handle cyclic dependencies (choose starting nodes)
         for p in self.parents:
             if not p.solved:
                 p.solve()
@@ -143,7 +144,7 @@ class LogicProduct():
             
     def plot(self, start, end, step):
         """
-        Plot the concentration of LogicProduct over time.
+        Calculate and plot the concentration of LogicProduct over time.
         """
         if not self.solved:
             self.solve()
@@ -194,6 +195,10 @@ class Switch():
     Switch that turns a LogicProduct on or off depending on the
     concentration of some parent LogicProduct.
     Acts as an edge in a transcription network.
+    Essentially, a Switch looks at the time varying concentration of its parent
+    node and produces a list of timepoints where the Switch turns on or off.
+    This sequence of timepoints can then be passed to the child node so that it
+    can determine its own concentration trajectory.
     """
     
     def __init__(self, parent=None, child=None, threshold=0.0,
