@@ -14,9 +14,15 @@ if __name__=='__main__':
 
     # SimpleProduct test
     print '\n*** SimpleProduct ***'
-    sp1 = SimpleProduct('Y', 2.0, -0.5)
+    # Linear, no product degradation
+    sp1 = SimpleProduct('Y', 2.0)
     sp1.report()
     sp1.plot()
+
+    # Product degradation (-0.5)
+    sp2 = SimpleProduct('Y', 2.0, -0.5)
+    sp2.report()
+    sp2.plot()
 
     # LogicProduct test
     print '\n*** LogicProduct ***'

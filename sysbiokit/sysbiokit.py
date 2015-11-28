@@ -97,6 +97,8 @@ class LogicProduct():
         self.switches = []
         self.solved = False
         self.breaks = []
+        self.ranges = []
+        self.vals = []
 
     def add_child(self, child, threshold, activate=True):
         self.children.append(child)
@@ -105,6 +107,7 @@ class LogicProduct():
 
     def add_switch(self, switch):
         self.switches.append(switch)
+        self.solved = False
 
     def solve(self):
         """
@@ -125,7 +128,38 @@ class LogicProduct():
             self.breaks = s.get_breaks()
         if len(self.breaks) == 0:
             self.breaks = [(0.0, True)]
-        
+
+        # Get piecewise ranges and function for each piece
+        if self.self_rate <= -0.00001 or self.self_rate >= 0.00001:
+            steady_rate = -self.const_rate/self.self_rate
+            rx_t = -np.log(2.0)/self.self_rate
+
+            # Functions for turning the product on or off
+            on_func = lambda y, z: lambda x: steady_rate + (y - steady_rate) * np.exp(self.self_rate*(x-z))
+            off_func = lambda y, z: lambda x: y * np.exp(self.self_rate*(x-z))
+
+            # Build lambdas
+            active = self.breaks[0][1]
+            self.vals = [self.initial_val]
+            last_val = self.initial_val
+            for i in range(len(self.breaks)-1):
+                print 'i:', i
+                print 'break:', self.breaks[i][0]
+                if active:
+                    self.vals.append(on_func(last_val, self.breaks[i][0]))
+                    last_val = on_func(last_val, self.breaks[i][0])(self.breaks[i+1][0])
+                else:
+                    self.vals.append(off_func(last_val, self.breaks[i][0]))
+                    last_val = off_func(last_val, self.breaks[i][0])(self.breaks[i+1][0])
+                active = not active
+                print 'last_val:', last_val
+            if active:
+                self.vals.append(on_func(last_val, self.breaks[-1][0]))
+            else:
+                self.vals.append(off_func(last_val, self.breaks[-1][0]))
+
+        self.solved = True
+
     def report(self):
         """
         Print information about the current state of SimpleProduct.
@@ -141,53 +175,27 @@ class LogicProduct():
                 print '  dX(t)/dt = %.2f - %.2fX' % (self.const_rate, -self.self_rate)
             print '  steady state = %.2f' % (-self.const_rate/self.self_rate)
             print '  reaction time = %.2f' % (-np.log(2.0)/self.self_rate)
-            
+
     def plot(self, start, end, step):
         """
         Calculate and plot the concentration of LogicProduct over time.
         """
         if not self.solved:
             self.solve()
+        
+        t = np.arange(start, end, step)
         if self.self_rate > -0.00001 and self.self_rate < 0.00001:
-            t = np.arange(start, end, step)
             y = self.const_rate * t
         else:
-            steady_rate = -self.const_rate/self.self_rate
-            rx_t = -np.log(2.0)/self.self_rate
-            t = np.arange(start, end, step)
-            on_func = lambda y, z: lambda x: steady_rate + (y - steady_rate) * np.exp(self.self_rate*(x-z))
-            off_func = lambda y, z: lambda x: y * np.exp(self.self_rate*(x-z))
-
             # Build ranges
             ranges = [t<self.breaks[0][0]]
             for i in range(1, len(self.breaks)):
                 ranges.append((t>=self.breaks[i-1][0]) * (t<self.breaks[i][0]))
             ranges.append(t>=self.breaks[-1][0])
-
-            # Build lambdas
-            active = self.breaks[0][1]
-            vals = [self.initial_val]
-            last_val = self.initial_val
-            for i in range(len(self.breaks)-1):
-                print 'i:', i
-                print 'break:', self.breaks[i][0]
-                if active:
-                    vals.append(on_func(last_val, self.breaks[i][0]))
-                    last_val = on_func(last_val, self.breaks[i][0])(self.breaks[i+1][0])
-                else:
-                    vals.append(off_func(last_val, self.breaks[i][0]))
-                    last_val = off_func(last_val, self.breaks[i][0])(self.breaks[i+1][0])
-                active = not active
-                print 'last_val:', last_val
-            if active:
-                vals.append(on_func(last_val, self.breaks[-1][0]))
-            else:
-                vals.append(off_func(last_val, self.breaks[-1][0]))
-            y = np.piecewise(t, ranges, vals)
+            y = np.piecewise(t, ranges, self.vals)
             
         plt.plot(t, y)
         plt.show()
-
 
 
 class Switch():
@@ -220,7 +228,8 @@ class Switch():
             self.solved = True
 
     def solve(self):
-        pass
+        if parent is None:
+            return
 
     def get_breaks(self):
         breaks = []
