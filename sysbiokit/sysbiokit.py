@@ -9,6 +9,10 @@ import numpy as np
 # import sympy
 
 
+# Regulation
+#   negative: repression (gene), inhibition (protein)
+#   positive: induction (gene), activation (protein)
+
 
 def heaviside(x, theta, on=True):
     """
@@ -84,8 +88,10 @@ class LogicProduct():
         name: name for this specific node in the network
         const_rate: 
         self_rate: 
-        initial_val: starting concntration (default 0.0)
+        initial_val: starting concentration (default 0.0)
         product_type: RNA, protein (just a label)
+        breaks: array of switch times
+        vals: array of functions
         """
         self.name = name
         self.const_rate = const_rate
@@ -97,15 +103,21 @@ class LogicProduct():
         self.switches = []
         self.solved = False
         self.breaks = []
-        self.ranges = []
         self.vals = []
 
     def add_child(self, child, threshold, activate=True):
+        """
+        Add a downstream node.  This sets up a Switch that will control the
+        child based on the state of the parent.
+        """
         self.children.append(child)
         child.parents.append(self)
         child.add_switch(Switch(self, child, threshold, activate))
 
     def add_switch(self, switch):
+        """
+        Used to connect to a parent.  Only called by self.add_child().
+        """
         self.switches.append(switch)
         self.solved = False
 
@@ -132,7 +144,6 @@ class LogicProduct():
         # Get piecewise ranges and function for each piece
         if self.self_rate <= -0.00001 or self.self_rate >= 0.00001:
             steady_rate = -self.const_rate/self.self_rate
-            rx_t = -np.log(2.0)/self.self_rate
 
             # Functions for turning the product on or off
             on_func = lambda y, z: lambda x: steady_rate + (y - steady_rate) * np.exp(self.self_rate*(x-z))
@@ -178,7 +189,7 @@ class LogicProduct():
 
     def plot(self, start, end, step):
         """
-        Calculate and plot the concentration of LogicProduct over time.
+        Plot the concentration of LogicProduct over time.
         """
         if not self.solved:
             self.solve()
@@ -192,6 +203,7 @@ class LogicProduct():
             for i in range(1, len(self.breaks)):
                 ranges.append((t>=self.breaks[i-1][0]) * (t<self.breaks[i][0]))
             ranges.append(t>=self.breaks[-1][0])
+            
             y = np.piecewise(t, ranges, self.vals)
             
         plt.plot(t, y)
@@ -212,15 +224,16 @@ class Switch():
     def __init__(self, parent=None, child=None, threshold=0.0,
                  activate=True, times=[0.0]):
         """
-        threshold: input value where Switch switches on/off
-        activate: whether the Switch is an activator or repressor
+        parent: upstream node
+        child: downstream noe
+        threshold: parent concentration value where Switch switches on/off
+        activate: whether the Switch is an activator (on) or inhibitor (off)
         times: set sequence of times when Switch switches (if no parent defined)
         """
         self.parent = parent
         self.child = child
         self.threshold = threshold
         self.activate = activate
-        self.time = []
         self.solved = False
 
         if parent is None:
@@ -230,6 +243,14 @@ class Switch():
     def solve(self):
         if parent is None:
             return
+
+        if not parent.solved:
+            parent.solve()
+
+        # Get switching times based on parent functional form
+        
+        
+        self.solved = True
 
     def get_breaks(self):
         breaks = []
