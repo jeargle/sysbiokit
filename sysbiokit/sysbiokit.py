@@ -96,6 +96,7 @@ class LogicProduct():
         self.name = name
         self.const_rate = const_rate
         self.self_rate = self_rate
+        self.steady_rate = -self.const_rate/self.self_rate
         self.initial_val = initial_val
         self.product_type = product_type
         self.parents = []
@@ -143,11 +144,12 @@ class LogicProduct():
 
         # Get piecewise ranges and function for each piece
         if self.self_rate <= -0.00001 or self.self_rate >= 0.00001:
-            steady_rate = -self.const_rate/self.self_rate
+            r_st = self.steady_rate
+            r_sf = self.self_rate
 
             # Functions for turning the product on or off
-            on_func = lambda y, z: lambda x: steady_rate + (y - steady_rate) * np.exp(self.self_rate*(x-z))
-            off_func = lambda y, z: lambda x: y * np.exp(self.self_rate*(x-z))
+            on_func = lambda y, z: lambda x: r_st + (y - r_st) * np.exp(r_sf*(x-z))
+            off_func = lambda y, z: lambda x: y * np.exp(r_sf*(x-z))
 
             # Build lambdas
             active = self.breaks[0][1]
@@ -242,17 +244,43 @@ class Switch():
             self.times = times
             self.solved = True
 
+    def solve_on(self, start_val, brk):
+        r_st = self.parent.steady_rate
+        r_sf = self.parent.self_rate
+        return np.log( (self.threshold - r_st)/(start_val - r_st) )/r_sf + brk
+    
+    def solve_off(self, start_val, brk):
+        return np.log(self.threshold/start_val) + brk
+            
     def solve(self):
-        if parent is None:
+        print '>Switch.solve()'
+        if self.parent is None:
             return
 
-        if not parent.solved:
-            parent.solve()
+        if not self.parent.solved:
+            self.parent.solve()
 
         # Get switching times based on parent functional form
-        
-        
+        self.times = []
+        start_val = self.parent.initial_val
+        for i, brk in enumerate(self.parent.breaks[0:-1]):
+            print 'i:', i
+            print 'brk:', brk[0]
+            end_val = self.parent.vals[i+1](self.parent.breaks[i+1][0])
+            print 'start_val:', start_val
+            print 'end_val:', end_val
+            if start_val < end_val:
+                self.times.append(self.solve_on(start_val, brk[0]))
+            else:
+                self.times.append(self.solve_off(start_val, brk[0]))
+            start_val = end_val
+        if start_val < end_val:
+            self.times.append(self.solve_on(start_val, brk[0]))
+        else:
+            self.times.append(self.solve_off(start_val, brk[0]))
+
         self.solved = True
+        print '<Switch.solve()'
 
     def get_breaks(self):
         breaks = []
@@ -260,6 +288,7 @@ class Switch():
         for t in self.times:
             breaks.append((t, flip))
             flip = not flip
+        print 'breaks:', breaks
         return breaks
 
     def __str__(self):

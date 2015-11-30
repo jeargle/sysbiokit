@@ -28,7 +28,7 @@ if __name__=='__main__':
     print '\n*** LogicProduct ***'
     lp1 = LogicProduct('Y', 2.0, -0.5)
     lp1.report()
-    lp1.plot(-1.0, 20.0, 0.2)
+    # lp1.plot(-1.0, 20.0, 0.2)
 
     # Switch test
     s1 = Switch(child=lp1, times=[0.5, 0.7, 1.3])
@@ -42,4 +42,12 @@ if __name__=='__main__':
     lp1.add_switch(s3)
     lp1.report()
     lp1.plot(-1.0, 40.0, 0.2)
+    
+    lp2 = LogicProduct('Y', 2.0, -0.5)
+    lp2.report()
+    lp1.add_child(lp2, 3.0)
+    lp2.report()
+    lp2.plot(-1.0, 40.0, 0.2)
+
+
     
