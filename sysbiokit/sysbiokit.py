@@ -153,22 +153,24 @@ class LogicProduct():
             active = self.breaks[0][1]
             self.vals = [self.initial_val]
             last_val = self.initial_val
-            for i in range(len(self.breaks)-1):
+            for i, brk in enumerate(self.breaks[0:-1]):
                 print 'i:', i
-                print 'break:', self.breaks[i][0]
+                print 'brk:', brk[0]
                 if active:
-                    self.vals.append(on_func(last_val, self.breaks[i][0]))
-                    last_val = on_func(last_val, self.breaks[i][0])(self.breaks[i+1][0])
+                    self.vals.append(on_func(last_val, brk[0]))
+                    last_val = on_func(last_val, brk[0])(self.breaks[i+1][0])
                 else:
-                    self.vals.append(off_func(last_val, self.breaks[i][0]))
-                    last_val = off_func(last_val, self.breaks[i][0])(self.breaks[i+1][0])
+                    self.vals.append(off_func(last_val, brk[0]))
+                    last_val = off_func(last_val, brk[0])(self.breaks[i+1][0])
                 active = not active
-                print 'last_val:', last_val
+                # print 'last_val:', last_val
             if active:
                 self.vals.append(on_func(last_val, self.breaks[-1][0]))
             else:
                 self.vals.append(off_func(last_val, self.breaks[-1][0]))
 
+        print 'len(breaks):', len(self.breaks)
+        print 'len(vals):', len(self.vals)
         self.solved = True
 
     def report(self):
