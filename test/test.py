@@ -45,9 +45,9 @@ if __name__=='__main__':
     
     lp2 = LogicProduct('Y', 2.0, -0.5)
     lp2.report()
-    lp1.add_child(lp2, 3.0)
+    lp1.add_child(lp2, 3.5)
     lp2.report()
-    lp2.plot(-1.0, 40.0, 0.2)
+    lp2.plot(-1.0, 40.0, 0.1)
 
 
     

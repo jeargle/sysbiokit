@@ -250,7 +250,8 @@ class Switch():
         return np.log( (self.threshold - r_st)/(start_val - r_st) )/r_sf + brk
     
     def solve_off(self, start_val, brk):
-        return np.log(self.threshold/start_val) + brk
+        r_sf = self.parent.self_rate
+        return np.log(self.threshold/start_val)/r_sf + brk
             
     def solve(self):
         print '>Switch.solve()'
@@ -263,24 +264,39 @@ class Switch():
         # Get switching times based on parent functional form
         self.times = []
         start_val = self.parent.initial_val
+        up = True
+        if start_val > self.threshold:
+            up = False
         for i, brk in enumerate(self.parent.breaks[0:-1]):
             print 'i:', i
             print 'brk:', brk[0]
             end_val = self.parent.vals[i+1](self.parent.breaks[i+1][0])
             print 'start_val:', start_val
             print 'end_val:', end_val
-            if start_val < end_val:
-                self.times.append(self.solve_on(start_val, brk[0]))
+            if up:
+            # if start_val < end_val:
+                time = self.solve_on(start_val, brk[0])
             else:
-                self.times.append(self.solve_off(start_val, brk[0]))
+                time = self.solve_off(start_val, brk[0])
+
+            if time >= brk[0] and time < self.parent.breaks[i+1][0]:
+                self.times.append(time)
+                up = not up
             start_val = end_val
-        if start_val < end_val:
-            self.times.append(self.solve_on(start_val, brk[0]))
+
+        end_val = self.parent.vals[i+1](self.parent.breaks[-1][0])
+
+        brk = self.parent.breaks[-1]
+        if up:
+        # if start_val < end_val:
+            time = self.solve_on(start_val, brk[0])
         else:
-            self.times.append(self.solve_off(start_val, brk[0]))
+            time = self.solve_off(start_val, brk[0])
+
+        if time >= brk[0]:
+            self.times.append(time)
 
         self.solved = True
-        print '<Switch.solve()'
 
     def get_breaks(self):
         breaks = []
