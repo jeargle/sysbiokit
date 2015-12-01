@@ -308,10 +308,26 @@ class Switch():
         return breaks
 
     def __str__(self):
-        
         str1 = 'Switch\n'
         str1 += 'activate: ' + str(self.activate) + '\n'
         str1 += '  solved: ' + str(self.solved) + '\n'
         str1 += '  breaks:\n'
         str1 += '  ' +  str(self.get_breaks()) + '\n'
         return str1
+
+
+class StoichioMatrix():
+    """
+    Matrix of reactants/products (rows) and reactions (columns).
+    Elements S_ij are integers representing how many of the chemical are used
+    or produced in a reaction.  Columns must maintain balance for mass, charge,
+    element, etc.  This class wraps numpy's matrix.
+    """
+
+    def __init__(self):
+        pass
+
+    def __str__(self):
+        str1 = 'StoichioMatrix\n'
+        return str1
+
