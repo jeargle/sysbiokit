@@ -77,8 +77,8 @@ class SimpleProduct():
 
 class LogicProduct():
     """
-    Product that is regulated by on/off switches possibly controlled
-    by the concentrations of other LogicProducts.
+    Product that is regulated by on/off switches controlled by the
+    concentrations of other LogicProducts.
     Acts as a node in a transcription network.
     """
 
@@ -212,6 +212,48 @@ class LogicProduct():
             
         plt.plot(t, y)
         plt.show()
+
+
+class SwitchBoard():
+    """
+    Combines signals from Switches to produce a single trace of breaks.
+    """
+
+    def __init__(self, switches, combName='and', combFunc=None):
+        """
+        switches: list of Switches
+        combName: 'and', 'or', 'custom'
+        combFunc: logic function that takes switch values and returns
+          True or False
+        """
+        self.switches = switches
+
+        if combName == 'and':
+            pass
+        elif combName == 'or':
+            pass
+        else:
+            self.combFunc = combFunc
+
+        self.times = []
+        self.solved = False
+
+    def solve(self):
+    
+        self.solved = True
+
+    def get_breaks(self):
+        breaks = []
+        flip = self.activate
+        for t in self.times:
+            breaks.append((t, flip))
+            flip = not flip
+        print 'breaks:', breaks
+        return breaks
+        
+    def __str__(self):
+        str1 = 'SwitchBoard\n'
+        return str1
 
 
 class Switch():
