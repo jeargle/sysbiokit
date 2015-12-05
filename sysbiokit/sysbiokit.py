@@ -1,6 +1,7 @@
 # John Eargle
 # 2015
 
+from collections import deque
 import sys
 import json
 
@@ -229,9 +230,9 @@ class SwitchBoard():
         self.switches = switches
 
         if combName == 'and':
-            pass
+            self.combFunc = lambda x: np.all(x)
         elif combName == 'or':
-            pass
+            self.combFunc = lambda x: np.any(x)
         else:
             self.combFunc = combFunc
 
@@ -239,10 +240,32 @@ class SwitchBoard():
         self.solved = False
 
     def solve(self):
-    
+        all_breaks = []
+        all_times = []
+        for s in self.switches:
+            breaks = s.get_breaks()
+            all_breaks.append(deque(breaks))
+            for b in breaks:
+                all_times.append(b[0])
+        all_times.sort()
+
+        break_mat = []  # matrix with rows (time) and cols (break dirs)
+        curr_dirs = [True] * len(all_breaks)
+        for t in all_times:
+            new_breaks = []
+            for i, bs in enumerate(all_breaks):
+                if bs[0][0] <= t:
+                    curr_dirs[i] = bs.popleft()[1]
+                new_breaks.append(curr_dirs[i])
+            break_mat.append(new_breaks)
+            
         self.solved = True
 
     def get_breaks(self):
+        """
+        Return the break times and directions for all Switches
+        combined.
+        """
         breaks = []
         flip = self.activate
         for t in self.times:
