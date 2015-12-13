@@ -396,3 +396,18 @@ class StoichioMatrix():
         str1 = 'StoichioMatrix\n'
         return str1
 
+    
+class StoichioBinMatrix():
+    """
+    Binary atrix of reactants/products (rows) and reactions (columns).
+    Elements S_ij are 0 or 1 representing presence or absence of chemicals
+    involved in a reaction.  This class wraps numpy's matrix.
+    """
+
+    def __init__(self):
+        pass
+
+    def __str__(self):
+        str1 = 'StoichioBinMatrix\n'
+        return str1
+

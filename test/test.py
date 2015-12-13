@@ -4,33 +4,36 @@
 from sysbiokit.sysbiokit import SimpleProduct, LogicProduct, Switch
 
 
-if __name__=='__main__':
+def simple_product_test1():
+    """
+    Linear, no product degradation
+    """
+    print '\n*** SimpleProduct ***'
+    sp1 = SimpleProduct('Y', 2.0)
+    sp1.report()
+    sp1.plot()
 
-    print '***********************'
-    print '*** SYSBIOKIT TESTS ***'
-    print '***********************'
-    
-    # time_plot(30)
-
-    # SimpleProduct test
-    # print '\n*** SimpleProduct ***'
-    # # Linear, no product degradation
-    # sp1 = SimpleProduct('Y', 2.0)
-    # sp1.report()
-    # sp1.plot()
-
-    # Product degradation (-0.5)
+def simple_product_test2():
+    """
+    Product degradation (-0.5)
+    """
+    print '\n*** SimpleProduct ***'
     sp2 = SimpleProduct('Y', 2.0, -0.5)
     sp2.report()
-    # sp2.plot()
+    sp2.plot()
 
+def logic_product_test1():
     # LogicProduct test
     print '\n*** LogicProduct ***'
     lp1 = LogicProduct('Y', 2.0, -0.5)
     lp1.report()
     # lp1.plot(-1.0, 20.0, 0.2)
 
-    # Switch test
+def switch_test1():
+    """
+    """
+    print '\n*** Switch ***'
+    lp1 = LogicProduct('Y', 2.0, -0.5)
     s1 = Switch(child=lp1, times=[0.5, 0.7, 1.3])
     print s1
 
@@ -49,5 +52,23 @@ if __name__=='__main__':
     lp2.report()
     lp2.plot(-1.0, 40.0, 0.1)
 
+def stoichiomatrix_test1():
+    pass
 
+def stoichiobinmatrix_test1():
+    pass
+
+
+if __name__=='__main__':
+
+    print '***********************'
+    print '*** SYSBIOKIT TESTS ***'
+    print '***********************'
     
+    # time_plot(30)
+
+    simple_product_test2()
+    logic_product_test1()
+    switch_test1()
+
+
