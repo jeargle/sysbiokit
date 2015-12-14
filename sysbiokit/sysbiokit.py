@@ -33,6 +33,12 @@ def time_plot(duration):
     plt.show()
 
 
+def bin_matrix(x):
+    if x>0:
+        return 1
+    return 0
+
+
 class SimpleProduct():
     """
     Product that is simply regulated by an on/off switch.
@@ -389,8 +395,8 @@ class StoichioMatrix():
     element, etc.  This class wraps numpy's matrix.
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, matrix):
+        self.matrix = matrix
 
     def __str__(self):
         str1 = 'StoichioMatrix\n'
@@ -404,8 +410,8 @@ class StoichioBinMatrix():
     involved in a reaction.  This class wraps numpy's matrix.
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, matrix):
+        self.matrix = np.array([[bin_matrix(n) for n in m] for m in matrix])
 
     def __str__(self):
         str1 = 'StoichioBinMatrix\n'
