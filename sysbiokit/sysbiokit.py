@@ -1,5 +1,5 @@
 # John Eargle
-# 2015
+# 2015-2016
 
 from collections import deque
 import sys
@@ -405,7 +405,7 @@ class StoichioMatrix():
     
 class StoichioBinMatrix():
     """
-    Binary atrix of reactants/products (rows) and reactions (columns).
+    Binary matrix of reactants/products (rows) and reactions (columns).
     Elements S_ij are 0 or 1 representing presence or absence of chemicals
     involved in a reaction.  This class wraps numpy's matrix.
     """
