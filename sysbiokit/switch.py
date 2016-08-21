@@ -10,7 +10,8 @@ import numpy as np
 # import sympy
 
 
-# Regulation
+# Regulation networks modeled as graphs of functional nodes connected
+# through switched input/output edges.
 #   negative: repression (gene), inhibition (protein)
 #   positive: induction (gene), activation (protein)
 
@@ -30,6 +31,7 @@ def time_plot(duration):
     x = np.arange(0, duration, 0.1)
     y = heaviside(x, duration/5.0) * np.sin(x) * np.exp(-x/20.0) * 5.0
     plt.plot(x, y)
+    plt.grid()
     plt.show()
 
 
@@ -79,6 +81,7 @@ class SimpleProduct():
             t = np.arange(0, duration, duration/50.0)
             y = steady_rate * (1.0 - np.exp(self.self_rate*t))
         plt.plot(t, y)
+        plt.grid()
         plt.show()
 
 
@@ -218,6 +221,7 @@ class LogicProduct():
             y = np.piecewise(t, ranges, self.vals)
             
         plt.plot(t, y)
+        plt.grid()
         plt.show()
 
 
@@ -384,36 +388,5 @@ class Switch():
         str1 += '  solved: ' + str(self.solved) + '\n'
         str1 += '  breaks:\n'
         str1 += '  ' +  str(self.get_breaks()) + '\n'
-        return str1
-
-
-class StoichioMatrix():
-    """
-    Matrix of reactants/products (rows) and reactions (columns).
-    Elements S_ij are integers representing how many of the chemical are used
-    or produced in a reaction.  Columns must maintain balance for mass, charge,
-    element, etc.  This class wraps numpy's matrix.
-    """
-
-    def __init__(self, matrix):
-        self.matrix = matrix
-
-    def __str__(self):
-        str1 = 'StoichioMatrix\n'
-        return str1
-
-    
-class StoichioBinMatrix():
-    """
-    Binary matrix of reactants/products (rows) and reactions (columns).
-    Elements S_ij are 0 or 1 representing presence or absence of chemicals
-    involved in a reaction.  This class wraps numpy's matrix.
-    """
-
-    def __init__(self, matrix):
-        self.matrix = np.array([[bin_matrix(n) for n in m] for m in matrix])
-
-    def __str__(self):
-        str1 = 'StoichioBinMatrix\n'
         return str1
 

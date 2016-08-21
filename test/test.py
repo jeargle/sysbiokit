@@ -1,7 +1,8 @@
 # John Eargle
 # 2015-2016
 
-from sysbiokit.sysbiokit import SimpleProduct, LogicProduct, Switch
+from sysbiokit.switch import SimpleProduct, LogicProduct, Switch
+from sysbiokit.matrix import StoichioMatrix, StoichioBinMatrix
 
 
 def simple_product_test1():
