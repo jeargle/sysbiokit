@@ -1,6 +1,8 @@
 # John Eargle
 # 2015-2016
 
+import numpy as np
+
 from sysbiokit.switch import SimpleProduct, LogicProduct, Switch
 from sysbiokit.matrix import StoichioMatrix, StoichioBinMatrix
 
@@ -54,7 +56,15 @@ def switch_test1():
     lp2.plot(-1.0, 40.0, 0.1)
 
 def stoichiomatrix_test1():
-    pass
+    m1 = np.matrix('1 2; 3 4')
+    m2 = np.matrix([[4, 3], [2, 1]])
+    print m1
+    print m2
+    
+    sm1 = StoichioMatrix(m1)
+    sm2 = StoichioMatrix(m2)
+    print sm1
+    print sm2
 
 def stoichiobinmatrix_test1():
     pass
@@ -68,8 +78,19 @@ if __name__=='__main__':
     
     # time_plot(30)
 
-    simple_product_test2()
-    logic_product_test1()
-    switch_test1()
+    # ====================
+    # Switch tests
+    # ====================
+    
+    # simple_product_test1()
+    # simple_product_test2()
+    # logic_product_test1()
+    # switch_test1()
 
+    # ====================
+    # Matrix tests
+    # ====================
+    
+    stoichiomatrix_test1()
+    # stoichiobinmatrix_test1()
 

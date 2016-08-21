@@ -6,6 +6,14 @@ import numpy as np
 
 # Metabolic networks represented and analyzed as various matrices
 
+
+def bin_matrix(x):
+    if x>0:
+        return 1
+    return 0
+
+
+
 class StoichioMatrix():
     """
     Matrix of reactants/products (rows) and reactions (columns).
