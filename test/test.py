@@ -56,6 +56,7 @@ def switch_test1():
     lp2.plot(-1.0, 40.0, 0.1)
 
 def stoichiomatrix_test1():
+    print '\n*** StoichioMatrix ***'
     m1 = np.matrix('1 2; 3 4')
     m2 = np.matrix([[4, 3], [2, 1]])
     print m1
@@ -67,7 +68,16 @@ def stoichiomatrix_test1():
     print sm2
 
 def stoichiobinmatrix_test1():
-    pass
+    print '\n*** StoichioBinMatrix ***'
+    m1 = np.matrix('1 0; 0 4')
+    m2 = np.matrix([[0, 3], [2, 1]])
+    print m1
+    print m2
+    
+    sbm1 = StoichioBinMatrix(m1)
+    sbm2 = StoichioBinMatrix(m2)
+    print sbm1
+    print sbm2
 
 
 if __name__=='__main__':
@@ -92,5 +102,5 @@ if __name__=='__main__':
     # ====================
     
     stoichiomatrix_test1()
-    # stoichiobinmatrix_test1()
+    stoichiobinmatrix_test1()
 
