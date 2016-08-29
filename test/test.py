@@ -5,6 +5,7 @@ import numpy as np
 
 from sysbiokit.switch import SimpleProduct, LogicProduct, Switch
 from sysbiokit.matrix import StoichioMatrix, StoichioBinMatrix
+from sysbiokit.element import elements, molecules
 
 
 def simple_product_test1():
@@ -97,6 +98,25 @@ def stoichiobinmatrix_test1():
     print np.allclose(sbm1.matrix, np.dot(U,np.dot(S,V)))
 
 
+def print_element(symbol):
+    print elements[symbol], elements[symbol].symbol
+    
+def element_test1():
+    print '\n*** Element ***'
+    print_element('H')
+    print_element('C')
+    print_element('N')
+    print_element('O')
+    print_element('P')
+    print_element('S')
+
+
+def molecule_test1():
+    print '\n*** Molecule ***'
+    print molecules['water'], ',', molecules['water'].formula
+    print molecules['citrate'], ',', molecules['citrate'].formula
+
+
 if __name__=='__main__':
 
     print '***********************'
@@ -118,6 +138,14 @@ if __name__=='__main__':
     # Matrix tests
     # ====================
     
-    stoichiomatrix_test1()
-    stoichiobinmatrix_test1()
+    # stoichiomatrix_test1()
+    # stoichiobinmatrix_test1()
 
+
+    # ====================
+    # Chemical tests
+    # ====================
+
+    element_test1()
+    molecule_test1()
+    
