@@ -69,12 +69,18 @@ def stoichiomatrix_test1():
     print sm2
 
     # SVD decomposition
-    U, s, V = np.linalg.svd(sm1.matrix)
-    S = np.diag(s)
-    print U
-    print S
-    print V
-    print np.allclose(sm1.matrix, np.dot(U,np.dot(S,V)))
+    # U, s, V = np.linalg.svd(sm1.matrix)
+    # S = np.diag(s)
+    sm1.svd()
+    print sm1.U
+    print sm1.S
+    print sm1.V
+    # print sm1.column_space
+    # print sm1.row_space
+    # print sm1.left_null_space
+    # print sm1.right_null_space
+    
+    print np.allclose(sm1.matrix, np.dot(sm1.U,np.dot(sm1.S,sm1.V)))
 
 
 def stoichiobinmatrix_test1():
@@ -138,7 +144,7 @@ if __name__=='__main__':
     # Matrix tests
     # ====================
     
-    # stoichiomatrix_test1()
+    stoichiomatrix_test1()
     # stoichiobinmatrix_test1()
 
 
@@ -146,6 +152,6 @@ if __name__=='__main__':
     # Chemical tests
     # ====================
 
-    element_test1()
-    molecule_test1()
+    # element_test1()
+    # molecule_test1()
     
