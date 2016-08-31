@@ -117,10 +117,15 @@ def element_test1():
     print_element('S')
 
 
+def print_molecule(name):
+    print molecules[name], ',', molecules[name].formula
+
 def molecule_test1():
     print '\n*** Molecule ***'
-    print molecules['water'], ',', molecules['water'].formula
-    print molecules['citrate'], ',', molecules['citrate'].formula
+    print_molecule('water')
+    print_molecule('citrate')
+    print_molecule('glucose')
+    print_molecule('dihydroxyacetone phosphate')
 
 
 if __name__=='__main__':
@@ -144,7 +149,7 @@ if __name__=='__main__':
     # Matrix tests
     # ====================
     
-    stoichiomatrix_test1()
+    # stoichiomatrix_test1()
     # stoichiobinmatrix_test1()
 
 
@@ -152,6 +157,6 @@ if __name__=='__main__':
     # Chemical tests
     # ====================
 
-    # element_test1()
-    # molecule_test1()
+    element_test1()
+    molecule_test1()
     

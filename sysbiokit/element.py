@@ -60,7 +60,7 @@ class Molecule():
         The formula is a string built from the composition.
         """
         self.name = name
-        self.composition = composition
+        self.composition = [(elements[c[0]], c[1]) for c in composition]
         self.formula = ''.join(['%s%d' % (c[0].symbol, c[1]) for c in self.composition])
 
     def __str__(self):
@@ -68,6 +68,15 @@ class Molecule():
 
 
 molecules = {
-    'water': Molecule('water', [(elements['H'], 2), (elements['O'], 1)]),
-    'citrate': Molecule('citrate', [(elements['C'], 6), (elements['H'], 5), (elements['O'], 7)]),
+    'water': Molecule('water', [('H', 2), ('O', 1)]),
+    'citrate': Molecule('citrate', [('C', 6), ('H', 5), ('O', 7)]),
+    'glucose': Molecule('glucose', [('C', 6), ('H', 12), ('O', 6)]),
+    'glucose-6-phosphate': Molecule('glucose-6-phosphate',
+                                    [('C', 6), ('H', 11), ('O', 9), ('P', 1)]),
+    'fructose-6-phosphate': Molecule('fructose-6-phosphate',
+                                     [('C', 6), ('H', 11), ('O', 9), ('P', 1)]),
+    'fructose-1,6-phosphate': Molecule('fructose-1,6-phosphate',
+                                     [('C', 6), ('H', 10), ('O', 12), ('P', 2)]),
+    'dihydroxyacetone phosphate': Molecule('dihydroxyacetone phosphate',
+                                     [('C', 3), ('H', 5), ('O', 6), ('P', 1)]),
 }
