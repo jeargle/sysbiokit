@@ -126,6 +126,11 @@ def molecule_test1():
     print_molecule('citrate')
     print_molecule('glucose')
     print_molecule('dihydroxyacetone phosphate')
+    print_molecule('pyruvate')
+    print_molecule('ribulose-5-phosphate')
+    print_molecule('inosine monophosphate')
+    print_molecule('hypoxanthine')
+    
 
 
 if __name__=='__main__':
