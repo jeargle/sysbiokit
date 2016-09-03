@@ -105,7 +105,8 @@ def stoichiobinmatrix_test1():
 
 
 def print_element(symbol):
-    print '%s %s' % (elements[symbol], elements[symbol].symbol)
+    e = elements[symbol]
+    print '%s %s' % (e, e.symbol)
     
 def element_test1():
     print '\n*** Element ***'
@@ -118,7 +119,8 @@ def element_test1():
 
 
 def print_molecule(name):
-    print '%s %s' % (molecules[name], molecules[name].formula)
+    m = molecules[name]
+    print '%s %s %s' % (m, m.formula, m.charge_str)
 
 def molecule_test1():
     print '\n*** Molecule ***'
@@ -130,6 +132,10 @@ def molecule_test1():
     print_molecule('ribulose-5-phosphate')
     print_molecule('inosine monophosphate')
     print_molecule('hypoxanthine')
+    print_molecule('cysteine')
+    print_molecule('tryptophan')
+    print_molecule('adenine')
+    print_molecule('adenosine triphosphate')
     
 
 
