@@ -105,7 +105,7 @@ def stoichiobinmatrix_test1():
 
 
 def print_element(symbol):
-    print elements[symbol], elements[symbol].symbol
+    print '%s %s' % (elements[symbol], elements[symbol].symbol)
     
 def element_test1():
     print '\n*** Element ***'
@@ -118,7 +118,7 @@ def element_test1():
 
 
 def print_molecule(name):
-    print molecules[name], ',', molecules[name].formula
+    print '%s %s' % (molecules[name], molecules[name].formula)
 
 def molecule_test1():
     print '\n*** Molecule ***'

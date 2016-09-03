@@ -20,8 +20,10 @@ class StoichioMatrix():
     This class wraps numpy's matrix.
     """
 
-    def __init__(self, matrix):
+    def __init__(self, matrix, rows=None, cols=None):
         self.matrix = matrix
+        self.rows = rows
+        self.cols = cols
         self.U = None
         self.S = None
         self.V = None
@@ -69,8 +71,24 @@ class StoichioBinMatrix():
         for row in range(rows):
             for col in range(cols):
                 self.matrix[row,col] = 0 if self.matrix[row,col] == 0 else 1
-        # self.matrix = np.array([[bin_matrix(n) for n in m] for m in matrix])
 
     def __str__(self):
         return str(self.matrix)
 
+
+class ElementalMatrix():
+    """
+    Matrix of elements (rows) and the molecules containing them (columns).
+    E_ij are positive counts for elements i within molecules j.  This class
+    wraps numpy's matrix.
+    """
+
+    def __init__(self, matrix):
+        """
+        Build an ElementalMatrix from the molecules contained in a
+        StoichioMatrix.
+        """
+        self.matrix = matrix.copy()
+
+    def __str__(self):
+        return str(self.matrix)
