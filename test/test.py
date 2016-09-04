@@ -58,8 +58,11 @@ def switch_test1():
 
 def stoichiomatrix_test1():
     print '\n*** StoichioMatrix ***'
-    m1 = np.matrix('1 2; 3 4')
-    m2 = np.matrix([[4, 3], [2, 1]])
+    m1 = np.matrix([[1, -1,  0,  0, -1,  0],
+                    [0,  1, -1,  0,  0,  0],
+                    [0,  0,  1, -1,  0,  1],
+                    [0,  0,  0,  0,  1, -1]])
+    m2 = np.matrix('1 2; 3 4')
     print m1
     print m2
     
@@ -72,13 +75,21 @@ def stoichiomatrix_test1():
     # U, s, V = np.linalg.svd(sm1.matrix)
     # S = np.diag(s)
     sm1.svd()
+    print 'U:'
     print sm1.U
+    print 'S:'
     print sm1.S
+    print 'V:'
     print sm1.V
-    # print sm1.column_space
-    # print sm1.row_space
-    # print sm1.left_null_space
-    # print sm1.right_null_space
+    
+    print 'column space:'
+    print sm1.column_space
+    print 'left null space:'
+    print sm1.left_null_space
+    print 'row space:'
+    print sm1.row_space
+    print 'right null space:'
+    print sm1.right_null_space
     
     print np.allclose(sm1.matrix, np.dot(sm1.U,np.dot(sm1.S,sm1.V)))
 
@@ -160,7 +171,7 @@ if __name__=='__main__':
     # Matrix tests
     # ====================
     
-    # stoichiomatrix_test1()
+    stoichiomatrix_test1()
     # stoichiobinmatrix_test1()
 
 
@@ -168,6 +179,6 @@ if __name__=='__main__':
     # Chemical tests
     # ====================
 
-    element_test1()
-    molecule_test1()
+    # element_test1()
+    # molecule_test1()
     

@@ -33,28 +33,37 @@ class StoichioMatrix():
 
     def svd(self):
         self.U, s, self.V = np.linalg.svd(self.matrix)
-        self.S = np.diag(s)
+        self.S = np.zeros(self.matrix.shape)
+        for i in range(len(s)):
+            self.S[i,i] = s[i]
 
     @property
     def column_space(self):
-        if self.S is None:
+        if self.U is None:
             self.svd()
-        return self.S
+        dim = np.count_nonzero(self.S)
+        return self.U[:,0:dim]
 
     @property
     def row_space(self):
-        return self.column_space
+        if self.V is None:
+            self.svd()
+        dim = np.count_nonzero(self.S)
+        return self.V[0:dim,:]
 
     @property
     def left_null_space(self):
         if self.U is None:
             self.svd()
-        return self.U
+        dim = np.count_nonzero(self.S)
+        return self.U[:,dim:]
 
     @property
     def right_null_space(self):
         if self.V is None:
             self.svd()
+        dim = np.count_nonzero(self.S)
+        return self.V[dim:,:]
         return self.V
 
 
