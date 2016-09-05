@@ -97,9 +97,10 @@ class ReactionMatrix():
         return str(self.matrix)
 
 
-class CompoundMatrix():
+class MoleculeMatrix():
     """
-    Binary compound adjacency matrix based on a StoichioBinMatrix.
+    Binary molecule adjacency matrix based on a StoichioBinMatrix.
+    Palsson refers to this as a "compound matrix".
     """
 
     def __init__(self, matrix):
