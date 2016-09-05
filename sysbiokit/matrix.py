@@ -110,6 +110,19 @@ class ReactionMatrix():
     def __str__(self):
         return str(self.matrix)
 
+    def molecule_count(self, row1, row2=None):
+        """
+        The number of Molecule types participating in a single
+        Reaction, or the number of Molecule types shared between
+        two Reactions.
+        """
+        count = 0
+        if row2 is None:
+            count = self.matrix[row1, row1]
+        else:
+            count = self.matrix[row1, row2]
+        return count
+    
 
 class MoleculeMatrix():
     """
@@ -123,6 +136,17 @@ class MoleculeMatrix():
     def __str__(self):
         return str(self.matrix)
 
+    def reaction_count(self, row1, row2=None):
+        """
+        The number of Reactions in which a Molecule type participates,
+        or the number of Reactions shared between two Molecule types.
+        """
+        count = 0
+        if row2 is None:
+            count = self.matrix[row1, row1]
+        else:
+            count = self.matrix[row1, row2]
+        return count
 
 class ElementalMatrix():
     """

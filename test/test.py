@@ -114,8 +114,16 @@ def stoichiobinmatrix_test1():
     cm1 = MoleculeMatrix(sbm1.matrix)
     print 'Reaction Matrix:'
     print rm1
+    print 'Molecules in Reaction 0:', rm1.molecule_count(0)
+    print 'Molecules in Reaction 1:', rm1.molecule_count(1)
+    print 'Molecules in Reaction 0,1:', rm1.molecule_count(0,1)
+    print 'Molecules in Reaction 1,0:', rm1.molecule_count(1,0)
     print 'Molecule Matrix:'
     print cm1
+    print 'Reactions for Molecule 0:', cm1.reaction_count(0)
+    print 'Reactions for Molecule 1:', cm1.reaction_count(1)
+    print 'Reactions for Molecule 0,1:', cm1.reaction_count(0,1)
+    print 'Reactions for Molecule 1,0:', cm1.reaction_count(1,0)
 
     rm2 = ReactionMatrix(sbm2.matrix)
     cm2 = MoleculeMatrix(sbm2.matrix)
