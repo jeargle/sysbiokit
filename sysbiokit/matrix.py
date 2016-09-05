@@ -20,10 +20,24 @@ class StoichioMatrix():
     This class wraps numpy's matrix.
     """
 
-    def __init__(self, matrix, rows=None, cols=None):
+    def __init__(self, matrix, molecules=None, reactions=None):
         self.matrix = matrix
-        self.rows = rows
-        self.cols = cols
+        self.molecules = molecules
+        if self.molecules is not None:
+            self.mol2row = {m: i for i, m in enumerate(self.molecules)}
+            self.name2row = {m.name: i for i, m in enumerate(self.molecules)}
+        else:
+            self.mol2row = None
+            self.name2row = None
+
+        self.reactions = reactions
+        if self.reactions is not None:
+            self.reaction2col = {r: i for i, r in enumerate(self.reactions)}
+            self.name2col = {r.name: i for i, r in enumerate(self.reactions)}
+        else:
+            self.reaction2col = None
+            self.name2col = None
+
         self.U = None
         self.S = None
         self.V = None

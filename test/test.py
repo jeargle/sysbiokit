@@ -192,8 +192,8 @@ if __name__=='__main__':
     # Matrix tests
     # ====================
     
-    # stoichiomatrix_test1()
-    # stoichiobinmatrix_test1()
+    stoichiomatrix_test1()
+    stoichiobinmatrix_test1()
 
 
     # ====================
