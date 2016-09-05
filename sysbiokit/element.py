@@ -48,6 +48,11 @@ elements = {
             Element('zinc', 'Zn', 30),
             Element('selenium', 'Se', 34),
             Element('bromine', 'Br', 35),
+            Element('element1', 'Ea', 1),
+            Element('element2', 'Eb', 2),
+            Element('element3', 'Ec', 3),
+            Element('element4', 'Ed', 4),
+            Element('element5', 'Ee', 5),
     ]
 }
 
@@ -69,7 +74,10 @@ class Molecule():
             self.abbr = self.name
         self.composition = [(elements[c[0]], c[1]) for c in composition]
         self.charge = charge
-        self.formula = ''.join(['%s%d' % (c[0].symbol, c[1]) for c in self.composition])
+        self.formula = ''.join(['%s%d' % (c[0].symbol, c[1])
+                                if c[1] > 1
+                                else c[0].symbol
+                                for c in self.composition])
 
     def __str__(self):
         return str(self.name)
@@ -89,9 +97,12 @@ class Molecule():
 molecules = {
     m.name: m
     for m in [
-            Molecule('hydrogen', [('H', 1)], charge=1),
+            Molecule('proton', [('H', 1)], charge=1),
+            Molecule('hydrogen', [('H', 2)]),
+            Molecule('oxygen', [('O', 2)]),
             Molecule('water', [('H', 2), ('O', 1)]),
             Molecule('carbon dioxide', [('C', 1), ('O', 2)]),
+            Molecule('hydrogen peroxide', [('H', 2), ('O', 2)]),
             Molecule('ammonia', [('N', 1), ('H', 3)]),
             Molecule('ammonium', [('N', 1), ('H', 4)], charge=1),
             Molecule('phosphate', [('H', 1), ('P', 1), ('O', 4)], charge=1, abbr='Pi'),
@@ -267,5 +278,80 @@ molecules = {
             Molecule('nicotinamide adenine dinucleotide phosphate H',
                      [('C', 21), ('H', 28), ('N', 7), ('O', 17), ('P', 3)],
                      abbr='NADPH'),
+            Molecule('molecule1',
+                     [('Ea', 1), ('Eb', 2)],
+                     abbr='mol1'),
+            Molecule('molecule2',
+                     [('Ea', 2), ('Ec', 2)],
+                     abbr='mol2'),
+            Molecule('molecule3',
+                     [('Ea', 2), ('Ed', 1)],
+                     abbr='mol3'),
+            Molecule('molecule4',
+                     [('Eb', 2), ('Ed', 3)],
+                     abbr='mol4'),
+            Molecule('molecule5',
+                     [('Eb', 2), ('Ee', 4)],
+                     abbr='mol5'),
+    ]
+}
+
+
+class Reaction():
+    """
+    Readonly information for a chemical reaction.
+    """
+
+    def __init__(self, name, inputs, outputs, enzyme=None, rate=None):
+        """
+        The inputs and outputs are lists of tuples (Molecule, count) holding
+        the molecular information for a chemical equation.
+        The enzyme is the name of the enzyme catalyzing the reaction.
+        The rate is the kinetic rate for the turnover from inputs to outputs.
+        """
+        self.name = name
+        self.inputs = inputs
+        self.outputs = outputs
+        self.enzyme = enzyme
+        self.rate = rate
+
+    def __str__(self):
+        return str(self.name)
+
+    @property
+    def equation_str(self):
+        eq_str = ''
+        for mol, count in self.inputs:
+            if count > 1:
+                eq_str += str(count) + ' '
+            eq_str +=  mol.formula + ' + '
+
+        eq_str = eq_str[:-2] + '--> '
+
+        for mol, count in self.outputs:
+            if count > 1:
+                eq_str += str(count) + ' '
+            eq_str += mol.formula + ' + '
+
+        eq_str = eq_str[:-3]
+
+        return eq_str
+
+
+reactions = {
+    r.name: r
+    for r in [
+            Reaction('reaction1',
+                     [(molecules['molecule1'], 2), (molecules['molecule2'], 1)],
+                     [(molecules['molecule3'], 2)]),
+            Reaction('reaction2',
+                     [(molecules['molecule1'], 2), (molecules['molecule2'], 2)],
+                     [(molecules['molecule4'], 2), (molecules['molecule5'], 2)]),
+            Reaction('reaction3',
+                     [(molecules['molecule2'], 1)],
+                     [(molecules['molecule3'], 2), (molecules['molecule5'], 2)]),
+            Reaction('reaction4',
+                     [(molecules['water'], 2), (molecules['oxygen'], 1)],
+                     [(molecules['hydrogen peroxide'], 2)]),
     ]
 }

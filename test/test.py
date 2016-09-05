@@ -5,8 +5,8 @@ import numpy as np
 
 from sysbiokit.switch import SimpleProduct, LogicProduct, Switch
 from sysbiokit.matrix import StoichioMatrix, StoichioBinMatrix
-from sysbiokit.matrix import ReactionMatrix, CompoundMatrix
-from sysbiokit.element import elements, molecules
+from sysbiokit.matrix import ReactionMatrix, MoleculeMatrix
+from sysbiokit.element import elements, molecules, reactions
 
 
 def simple_product_test1():
@@ -111,17 +111,17 @@ def stoichiobinmatrix_test1():
     print sbm2
 
     rm1 = ReactionMatrix(sbm1.matrix)
-    cm1 = CompoundMatrix(sbm1.matrix)
+    cm1 = MoleculeMatrix(sbm1.matrix)
     print 'Reaction Matrix:'
     print rm1
-    print 'Compound Matrix:'
+    print 'Molecule Matrix:'
     print cm1
 
     rm2 = ReactionMatrix(sbm2.matrix)
-    cm2 = CompoundMatrix(sbm2.matrix)
+    cm2 = MoleculeMatrix(sbm2.matrix)
     print 'Reaction Matrix:'
     print rm2
-    print 'Compound Matrix:'
+    print 'Molecule Matrix:'
     print cm2
 
 
@@ -157,7 +157,18 @@ def molecule_test1():
     print_molecule('tryptophan')
     print_molecule('adenine')
     print_molecule('adenosine triphosphate')
-    
+
+def print_reaction(name):
+    m = reactions[name]
+    print '%s: %s' % (m, m.equation_str)
+
+def reaction_test1():
+    print '\n*** Reaction ***'
+    print_reaction('reaction1')
+    print_reaction('reaction2')
+    print_reaction('reaction3')
+    print_reaction('reaction4')
+
 
 
 if __name__=='__main__':
@@ -181,14 +192,15 @@ if __name__=='__main__':
     # Matrix tests
     # ====================
     
-    stoichiomatrix_test1()
-    stoichiobinmatrix_test1()
+    # stoichiomatrix_test1()
+    # stoichiobinmatrix_test1()
 
 
     # ====================
     # Chemical tests
     # ====================
 
-    # element_test1()
-    # molecule_test1()
+    element_test1()
+    molecule_test1()
+    reaction_test1()
     
