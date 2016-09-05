@@ -85,6 +85,30 @@ class StoichioBinMatrix():
         return str(self.matrix)
 
 
+class ReactionMatrix():
+    """
+    Binary reaction adjacency matrix based on a StoichioBinMatrix.
+    """
+
+    def __init__(self, matrix):
+        self.matrix = np.dot(matrix.transpose(), matrix)
+
+    def __str__(self):
+        return str(self.matrix)
+
+
+class CompoundMatrix():
+    """
+    Binary compound adjacency matrix based on a StoichioBinMatrix.
+    """
+
+    def __init__(self, matrix):
+        self.matrix = np.dot(matrix, matrix.transpose())
+
+    def __str__(self):
+        return str(self.matrix)
+
+
 class ElementalMatrix():
     """
     Matrix of elements (rows) and the molecules containing them (columns).

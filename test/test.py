@@ -5,6 +5,7 @@ import numpy as np
 
 from sysbiokit.switch import SimpleProduct, LogicProduct, Switch
 from sysbiokit.matrix import StoichioMatrix, StoichioBinMatrix
+from sysbiokit.matrix import ReactionMatrix, CompoundMatrix
 from sysbiokit.element import elements, molecules
 
 
@@ -96,8 +97,11 @@ def stoichiomatrix_test1():
 
 def stoichiobinmatrix_test1():
     print '\n*** StoichioBinMatrix ***'
-    m1 = np.matrix('1 0; 0 4')
-    m2 = np.matrix([[0, 3], [2, 1]])
+    m1 = np.matrix([[1, -1,  0,  0, -1,  0],
+                    [0,  1, -1,  0,  0,  0],
+                    [0,  0,  1, -1,  0,  1],
+                    [0,  0,  0,  0,  1, -1]])
+    m2 = np.matrix([[-1, 1], [1, -1]])
     print m1
     print m2
     
@@ -106,13 +110,19 @@ def stoichiobinmatrix_test1():
     print sbm1
     print sbm2
 
-    # SVD decomposition
-    U, s, V = np.linalg.svd(sbm1.matrix)
-    S = np.diag(s)
-    print U
-    print S
-    print V
-    print np.allclose(sbm1.matrix, np.dot(U,np.dot(S,V)))
+    rm1 = ReactionMatrix(sbm1.matrix)
+    cm1 = CompoundMatrix(sbm1.matrix)
+    print 'Reaction Matrix:'
+    print rm1
+    print 'Compound Matrix:'
+    print cm1
+
+    rm2 = ReactionMatrix(sbm2.matrix)
+    cm2 = CompoundMatrix(sbm2.matrix)
+    print 'Reaction Matrix:'
+    print rm2
+    print 'Compound Matrix:'
+    print cm2
 
 
 def print_element(symbol):
@@ -172,7 +182,7 @@ if __name__=='__main__':
     # ====================
     
     stoichiomatrix_test1()
-    # stoichiobinmatrix_test1()
+    stoichiobinmatrix_test1()
 
 
     # ====================
