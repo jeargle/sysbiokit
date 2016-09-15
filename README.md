@@ -8,3 +8,10 @@ Network Structure
 -----------------
 
 Transcription network models are built up from nodes (SimpleProduct and LogicProduct) and edges (Switch).
+
+
+Dependencies
+------------
+
+1. NumPy
+2. matplotlib
