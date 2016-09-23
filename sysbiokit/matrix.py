@@ -148,6 +148,7 @@ class MoleculeMatrix():
             count = self.matrix[row1, row2]
         return count
 
+
 class ElementalMatrix():
     """
     Matrix of elements (rows) and the molecules containing them (columns).
@@ -155,12 +156,31 @@ class ElementalMatrix():
     wraps numpy's matrix.
     """
 
-    def __init__(self, matrix):
+    def __init__(self, smatrix, elements=None):
         """
         Build an ElementalMatrix from the molecules contained in a
         StoichioMatrix.
         """
-        self.matrix = matrix.copy()
+        if len(smatrix.molecules) == 0:
+            print 'Error: empty Molecule list'
+
+        self.elements = elements
+        if self.elements == None:
+            self.build_elements(smatrix.molecules)
+        self.el2row = {e: i for i, e in enumerate(self.elements)}
+        self.name2row = {e.name: i for i, e in enumerate(self.elements)}
+
+        for molecule in smatrix.molecules:
+            pass
+
+    def build_elements(self, molecules):
+        self.elements = []
+        used_elements = {}
+        for molecule in molecules:
+            for element in molecule.elements:
+                if element not in used_elements:
+                    used_elements[element] = True
+                    self.elements.append(element)
 
     def __str__(self):
         return str(self.matrix)

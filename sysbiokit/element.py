@@ -79,6 +79,14 @@ class Molecule():
                                 else c[0].symbol
                                 for c in self.composition])
 
+    @property
+    def elements(self):
+        """
+        Iterator of Elements within the Molecule.
+        """
+        for element, _ in self.composition:
+            yield element
+
     def __str__(self):
         return str(self.name)
 

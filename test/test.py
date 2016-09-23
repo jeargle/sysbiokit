@@ -94,7 +94,6 @@ def stoichiomatrix_test1():
     
     print np.allclose(sm1.matrix, np.dot(sm1.U,np.dot(sm1.S,sm1.V)))
 
-
 def stoichiobinmatrix_test1():
     print '\n*** StoichioBinMatrix ***'
     m1 = np.matrix([[1, -1,  0,  0, -1,  0],
@@ -132,7 +131,6 @@ def stoichiobinmatrix_test1():
     print 'Molecule Matrix:'
     print cm2
 
-
 def print_element(symbol):
     e = elements[symbol]
     print '%s %s' % (e, e.symbol)
@@ -145,7 +143,6 @@ def element_test1():
     print_element('O')
     print_element('P')
     print_element('S')
-
 
 def print_molecule(name):
     m = molecules[name]
@@ -177,6 +174,17 @@ def reaction_test1():
     print_reaction('reaction3')
     print_reaction('reaction4')
 
+def elementalmatrix_test1():
+    m1 = np.matrix([[1, -1,  0,  0, -1,  0],
+                    [0,  1, -1,  0,  0,  0],
+                    [0,  0,  1, -1,  0,  1],
+                    [0,  0,  0,  0,  1, -1]])
+    print m1
+
+    sm1 = StoichioMatrix(sm1)
+    em1 = ElementalMatrix(sm1)
+    print 'Elemental Matrix:'
+    print em1
 
 
 if __name__=='__main__':
