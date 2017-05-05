@@ -165,13 +165,14 @@ class ElementalMatrix():
             print 'Error: empty Molecule list'
 
         self.elements = elements
-        if self.elements == None:
+        if self.elements is None:
             self.build_elements(smatrix.molecules)
         self.el2row = {e: i for i, e in enumerate(self.elements)}
         self.name2row = {e.name: i for i, e in enumerate(self.elements)}
 
         for molecule in smatrix.molecules:
-            pass
+            for element in molecule.elements:
+                pass
 
     def build_elements(self, molecules):
         self.elements = []

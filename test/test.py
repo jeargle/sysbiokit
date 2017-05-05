@@ -1,5 +1,5 @@
 # John Eargle
-# 2015-2016
+# 2015-2017
 
 import numpy as np
 
@@ -175,16 +175,25 @@ def reaction_test1():
     print_reaction('reaction4')
 
 def elementalmatrix_test1():
-    m1 = np.matrix([[1, -1,  0,  0, -1,  0],
-                    [0,  1, -1,  0,  0,  0],
-                    [0,  0,  1, -1,  0,  1],
-                    [0,  0,  0,  0,  1, -1]])
+    # 2H2 + O2 -> 2H2O
+    m1 = np.matrix([[-2], [-1], [2]])
     print m1
+    mols1 = ['hydrogen', 'oxygen', 'water']
 
-    sm1 = StoichioMatrix(sm1)
+    # CH4 + H2O -> CH3OH + H2
+    m2 = np.matrix([[-1], [-1], [1], [1]])
+    print m2
+    mols2 = ['methane', 'water', 'ethanol', 'hydrogen']
+
+    sm1 = StoichioMatrix(m1, mols1)
     em1 = ElementalMatrix(sm1)
     print 'Elemental Matrix:'
     print em1
+
+    sm2 = StoichioMatrix(m2, mols2)
+    em2 = ElementalMatrix(sm2)
+    print 'Elemental Matrix:'
+    print em2
 
 
 if __name__=='__main__':

@@ -1,5 +1,5 @@
 # John Eargle
-# 2016
+# 2016-2017
 
 
 # Element and Molecule information
@@ -111,6 +111,9 @@ molecules = {
             Molecule('water', [('H', 2), ('O', 1)]),
             Molecule('carbon dioxide', [('C', 1), ('O', 2)]),
             Molecule('hydrogen peroxide', [('H', 2), ('O', 2)]),
+            Molecule('methane', [('C', 1), ('H', 4)]),
+            Molecule('methanol', [('C', 1), ('H', 4), ('O', 1)]),
+            Molecule('ethanol', [('C', 1), ('H', 5), ('O', 1)]),
             Molecule('ammonia', [('N', 1), ('H', 3)]),
             Molecule('ammonium', [('N', 1), ('H', 4)], charge=1),
             Molecule('phosphate', [('H', 1), ('P', 1), ('O', 4)], charge=1, abbr='Pi'),
