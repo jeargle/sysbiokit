@@ -5,7 +5,7 @@ import numpy as np
 
 from sysbiokit.switch import SimpleProduct, LogicProduct, Switch
 from sysbiokit.matrix import StoichioMatrix, StoichioBinMatrix
-from sysbiokit.matrix import ReactionMatrix, MoleculeMatrix
+from sysbiokit.matrix import ReactionMatrix, MoleculeMatrix, ElementalMatrix
 from sysbiokit.element import elements, molecules, reactions
 
 
@@ -178,22 +178,32 @@ def elementalmatrix_test1():
     # 2H2 + O2 -> 2H2O
     m1 = np.matrix([[-2], [-1], [2]])
     print m1
-    mols1 = ['hydrogen', 'oxygen', 'water']
+    mols1 = [molecules[name]
+             for name in ['hydrogen', 'oxygen', 'water']]
 
     # CH4 + H2O -> CH3OH + H2
     m2 = np.matrix([[-1], [-1], [1], [1]])
     print m2
-    mols2 = ['methane', 'water', 'ethanol', 'hydrogen']
+    mols2 = [molecules[name]
+             for name in ['methane', 'water', 'methanol', 'hydrogen']]
 
     sm1 = StoichioMatrix(m1, mols1)
     em1 = ElementalMatrix(sm1)
     print 'Elemental Matrix:'
     print em1
+    for element in em1.elements:
+        print element
+    for molecule in em1.molecules:
+        print molecule, molecule.formula
 
     sm2 = StoichioMatrix(m2, mols2)
     em2 = ElementalMatrix(sm2)
     print 'Elemental Matrix:'
     print em2
+    for element in em2.elements:
+        print element
+    for molecule in em2.molecules:
+        print molecule, molecule.formula
 
 
 if __name__=='__main__':
@@ -217,9 +227,9 @@ if __name__=='__main__':
     # Matrix tests
     # ====================
     
-    stoichiomatrix_test1()
-    stoichiobinmatrix_test1()
-
+    # stoichiomatrix_test1()
+    # stoichiobinmatrix_test1()
+    elementalmatrix_test1()
 
     # ====================
     # Chemical tests

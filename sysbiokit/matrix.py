@@ -165,19 +165,25 @@ class ElementalMatrix():
             print 'Error: empty Molecule list'
 
         self.elements = elements
+        self.molecules = smatrix.molecules
         if self.elements is None:
-            self.build_elements(smatrix.molecules)
+            self.build_elements()
         self.el2row = {e: i for i, e in enumerate(self.elements)}
         self.name2row = {e.name: i for i, e in enumerate(self.elements)}
 
-        for molecule in smatrix.molecules:
-            for element in molecule.elements:
-                pass
+        matList = []  # list of lists to construct matrix
+        for molecule in self.molecules:
+            elementList = [0] * len(self.elements)  # list of element counts
+            for element, count in molecule.composition:
+                elementList[self.el2row[element]] += count
+            matList.append(elementList)
 
-    def build_elements(self, molecules):
+        self.matrix = np.matrix(matList).transpose()
+
+    def build_elements(self):
         self.elements = []
         used_elements = {}
-        for molecule in molecules:
+        for molecule in self.molecules:
             for element in molecule.elements:
                 if element not in used_elements:
                     used_elements[element] = True
